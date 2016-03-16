@@ -15,8 +15,13 @@ func main() {
     log.Println("Starting Socker server...")
     address := flag.String("address", "localhost:8080", "The address of the Socker server")
     flag.Parse()
+
     chatWindowTemplate = template.Must(template.ParseFiles(filepath.Join(resources(), "index.html")))
     http.HandleFunc("/", chatWindowHandler)
+
+    h := newChatHub()
+    go h.run()
+    http.Handle("/chat", chatHandler{hub: h})
     err := http.ListenAndServe(*address, nil)
     if err != nil {
         log.Fatal("Failed to start Socker server", err)
