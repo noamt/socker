@@ -18,6 +18,9 @@ func main() {
 
     chatWindowTemplate = template.Must(template.ParseFiles(filepath.Join(resources(), "index.html")))
     http.HandleFunc("/", chatWindowHandler)
+   
+    fs := http.FileServer(http.Dir(filepath.Join(resources(), "static")))
+    http.Handle("/static/", http.StripPrefix("/static/", fs))
 
     h := newChatHub()
     go h.run()
