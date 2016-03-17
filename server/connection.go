@@ -10,20 +10,26 @@ type chatConnection struct {
     hub *chatHub
 }
 
+type message struct {
+    from string
+    to string
+    content string
+}
+
 func (c *chatConnection) startReading() {
     for {
-        _, message, err := c.webSocketConnection.ReadMessage()
+        _, m, err := c.webSocketConnection.ReadMessage()
 	if err != nil {
 	    break
 	}
-	c.hub.inboundMessages <- message
+	c.hub.inboundMessages <- m
     }
     c.webSocketConnection.Close()
 }
 
 func (c *chatConnection) startWriting() {
-    for message := range c.out {
-        err := c.webSocketConnection.WriteMessage(websocket.TextMessage, message)
+    for m := range c.out {
+        err := c.webSocketConnection.WriteMessage(websocket.TextMessage, m)
 	if err != nil {
 	    break
 	}
