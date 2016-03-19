@@ -2,6 +2,8 @@
 
 A friendly chat with your Docker daemons.
 
+image:https://travis-ci.org/noamt/socker.svg?branch=master["Build Status", link="https://travis-ci.org/noamt/socker"]
+
 == What is this?
 
 Socker is an experiment. I want to make interactions with Docker more accessible to a less technical crowd.
