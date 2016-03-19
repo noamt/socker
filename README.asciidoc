@@ -1,0 +1,76 @@
+= Socker
+
+A friendly chat with your Docker daemons.
+
+== What is this?
+
+Socker is an experiment. I want to make interactions with Docker more accessible to a less technical crowd.
+
+In this case I'm building a web-chat like interface for commanding daemons.
+
+== How does it work?
+
+Socker has 2 components - the server and the agent.
+
+You need only one instance of the server; The server mediates between the users and the agents and all communications are over WebSockets.
+
+The agent can be installed anywhere but should have network access to both the Docker daemon and the server.
+
+One serve can handle any number of agents.
+
+=== First phase of implementation
+
+For the POC phase all client input is relayed as-is to the agent.
+
+=== Goals of future phases
+
+* Create a DSL over common daemon commands.
+* Stream daemon responses.
+
+== Using Socker
+
+=== Building
+
+In your ```GOPATH``` build the server and the agent binaries using:
+
+```go get github.com/noamt/socker/server```
+
+and
+
+```go get github.com/noamt/socker/server```
+
+=== Running the server
+
+You can run the server using the following command:
+
+```./server```
+
+The server will by default bind to ```localhost:8080```. You can modify this by using the address switch:
+
+```./server -address foo-bar:1337```
+
+=== Running the agent
+
+You can run the agent using the following command:
+
+```./agent```
+
+The agent will by default identify itself as ```local``` and will try to communciate with a server at localhost:8080. You can modify these using the following switches:
+
+```./agent -id node1 -server foo-bar:1337```
+
+=== Accessing the Web UI
+
+Simply browse to ```localhost:8080``` or the address specified to the server.
+
+=== Supported commands
+
+Socker supports two types of commands - collective and specific.
+
+Collective commands are directed at all agents, prefixed with ```@all``` and are followed by the directives. For example, to have all agents report in use:
+
+```@all report```
+
+Specific commands are directed at one agent, is prefixed with ```@AGENT_NAME``` and is followed by the directives. For example, to view what containers are running on a specific agent use:
+
+```local ps -a```
